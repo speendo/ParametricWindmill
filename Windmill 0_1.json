@@ -1,0 +1,23 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "Neue Parameter Liste1": {
+            "bearingHeight": "8",
+            "bearingInnerDiameter": "5",
+            "bearingOuterDiameter": "17",
+            "bearingWallWidth": "1",
+            "extraTextRotation": "20",
+            "font": "DejaVu Sans:style=Bold",
+            "fontSize": "5",
+            "imprint": "Schneider",
+            "numberOfLeafs": "4",
+            "size": "100",
+            "stroke": "0.80000000000000004",
+            "switchDirection": "false",
+            "textOffset": "0",
+            "textRotation": "90",
+            "textThickness": "0.20000000000000001",
+            "thickness": "0.40000000000000002"
+        }
+    }
+}
