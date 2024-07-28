@@ -1,3 +1,7 @@
+// Modified for
+// (1) gap as parameter
+// (2) bottom ring height as parameter
+
 // Printed Bearing
 // by Radus 2018
 // http://vk.com/linuxbashev
@@ -7,8 +11,10 @@ diameter_in=8;   // Inner Diameter
 diameter_out=22; // Outer Diameter
 height=7;        // Height
 wall_width=0.79; // Wall Width
+roller_gap=0.15; // Roller Gap
+bottom_ring_height=0.15; // print bottom ring
 
-printedbearing(diameter_in,diameter_out,height, wall_width);  // 608
+printedbearing(diameter_in,diameter_out,height, wall_width, roller_gap, bottom_ring_height);  // 608
 
 // Examples
 //translate([0,0,0])  printedbearing(3,10,4, 0.52);  // 623
@@ -26,7 +32,7 @@ printedbearing(diameter_in,diameter_out,height, wall_width);  // 608
 
 function catb(cata,catang)=cata/cos(catang)*sin(catang);
 
-module printedbearing(pdi=8, pdo=22, ph=7, pw=1){
+module printedbearing(pdi=8, pdo=22, ph=7, pw=1, rg=0.15, br=true){
 
 do=pdo;
 di=pdi;
@@ -34,7 +40,7 @@ h=ph;
 w2=pw;
 w1=w2;
 
-zz=0.15;             // gap between rollers and base
+zz=rg;             // gap between rollers and base
 
 dr=do/2-di/2-w1*2-w2*2-zz*2;
 
@@ -47,7 +53,7 @@ h3=h-h1*2-h2*2;
 
 n=floor(2*PI*(di/2+(do/2-di/2)/2)/(dr+w1*2));
 //echo(n);
-sph=0.15;
+sph=bottom_ring_height;
 spw=0.6;
 $fn=64;
 
@@ -105,7 +111,9 @@ bout();
 bin();
 for (r=[0:n-1]) rotate([0,0,360/n*r])
 translate([di/2+(do/2-di/2)/2,0,0]) rol();
-sp();
+if (br) {
+    sp();
+}
 } //un
 //cube([100,100,100]);
 } // df
