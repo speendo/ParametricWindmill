@@ -1,34 +1,69 @@
-part = "W"; // [W:Windmill, T:Text]
+/* [Main Settings] */
+// Which part to generate
+part = "W"; // [W:Windmill, T:Text, A:All]
 
+// Total Diameter
 size = 200; // [50:0.1:400]
-gap = 0.8; // [0.05:0.01:1]
 
-thickness = 0.25; // [0.05:0.01:1]
-textThickness = 0.25; // [0.05:0.01:1]
-
+// Diameter of the holding stick
 stickDiameter = 6; // [2.5:0.01:10]
-wallThickness = 2; // [1:0.1:4]
 
-switchDirection = false;
-
+/* [Text] */
+// Text (controls # of leaves)
 imprint = "YourText";
+// Selected Font
 font = "DejaVu Sans:style=Bold";
+// Font Size
 fontSize = 20; // [5:0.5:50]
+// First Layer (inside of leafs), Last layer (outside of leafs), All Layers (inside and outside)
 textPosition = "F"; // [F:First Layer, L:Last Layer, A:All Layers]
+// When Blowing the Windmill, Correct Letter order on Top or Bottom
 readFrom = "B"; // ["B":Bottom, "T":Top]
 textRotation = 0; // [0:1:360]
+// Mirror Text to Read from inside
 mirrorText = true;
+// Text Thickness (<= than Leaf Thickness)
+textThickness = 0.25; // [0.05:0.01:1]
 
-bearingInnerDiameter = 10;
-bearingOuterDiameter = 26;
-bearingHeight = 8;
-bearingWallWidth = 1.07;
-bearingGap = 0.27; // [0.05:0.01:1]
-bearingBottomRingHeight = 0.0; // [0.05:0.01:0.5]
+/* [Leaf Settings] */
+// Gap between Leaves
+gap = 0.8; // [0.05:0.01:1]
 
+// Leave Thickness
+thickness = 0.25; // [0.05:0.01:1]
+
+// Leaves Facing Left or Right
+switchDirection = false;
+
+/* [Connector Settings] */
+// Connector Circle Diameter
 snapDiameter = 8;
+
+// Wall Thickness where the Connector Ring ends on the leaf
 snapWall = 3.5;
+
+// Offset from the Leaf Tip to the Connector Ring Center
 snapOffset = 8;
+
+
+/* [Advanced Settings] */
+
+// Wall Thickness surrounding holding stick
+wallThickness = 2; // [1:0.1:4]
+
+/* [Bearing Settings] */
+// Inner Diameter (advanced)
+bearingInnerDiameter = 10; // [3:0.1:20]
+//Outer Diameter (advanced)
+bearingOuterDiameter = 26; // [6:0.1:40]
+// Bearing Height (advanced)
+bearingHeight = 8; // [4:0.1:15]
+// Bearing Wall Width
+bearingWallWidth = 1.07; // [0.5:0.01:3]
+// Gap between Bearing "balls" and wall
+bearingGap = 0.27; // [0.05:0.01:1]
+// A ring on the build plate reduces the risk of "balls" detaching from the build plate during printing. leave at zero for no ring.
+bearingBottomRingHeight = 0.0; // [0.05:0.01:0.5]
 
 resolution = 100;
 
@@ -128,9 +163,9 @@ module oneLeafWithCutouts() {
 
 module leafText(letters) {
     embossThickness = textPosition == "A" ? thickness + 2 : textThickness + 1;
-    finalThickness = part == "T" ? textPosition == "A" ? thickness : textThickness : embossThickness;
+    finalThickness = part == "T" || part == "A" ? textPosition == "A" ? thickness : textThickness : embossThickness;
     
-    textPos = part == "T" ? 0 : textPosition == "A" ? -1 : textPosition == "F" ? -1 : textPosition == "L" ? thickness - textThickness : 0;
+    textPos = part == "T" || part == "A" ? 0 : textPosition == "A" ? -1 : textPosition == "F" ? -1 : textPosition == "L" ? thickness - textThickness : 0;
     
     initTextRot = readFrom == "B" ? 90 : readFrom == "T" ? -90 : 90;
     
@@ -213,11 +248,12 @@ module makeWindmill() {
 }
 
 module select() {
-    if (part == "W") {
+    if (part == "W" || part == "A") {
         color("green") {
             makeWindmill();
         }
-    } else if (part == "T") {
+    }
+    if (part == "T" || part == "A") {
         color("red") {
             allText();
         }
