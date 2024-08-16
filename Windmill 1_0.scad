@@ -16,28 +16,28 @@ font = "DejaVu Sans:style=Bold";
 // Font Size
 fontSize = 20; // [5:0.5:50]
 // First Layer (inside of leafs), Last layer (outside of leafs), All Layers (inside and outside)
-textPosition = "F"; // [F:First Layer, L:Last Layer, A:All Layers]
+textPosition = "A"; // [F:First Layer, L:Last Layer, A:All Layers]
 // When Blowing the Windmill, Correct Letter order on Top or Bottom
-readFrom = "B"; // ["B":Bottom, "T":Top]
+readFrom = "T"; // ["B":Bottom, "T":Top]
 textRotation = 0; // [0:1:360]
 // Mirror Text to Read from inside
 mirrorText = true;
 // Text Thickness (<= than Leaf Thickness)
-textThickness = 0.25; // [0.05:0.01:1]
+textThickness = 0.3; // [0.05:0.01:1]
 
 /* [Leaf Settings] */
 // Gap between Leaves
-gap = 0.8; // [0.05:0.01:1]
+gap = 0.6; // [0.05:0.01:1]
 
 // Leave Thickness
-thickness = 0.25; // [0.05:0.01:1]
+thickness = 0.3; // [0.05:0.01:1]
 
 // Leaves Facing Left or Right
 switchDirection = false;
 
 /* [Connector Settings] */
 // Connector Circle Diameter
-snapDiameter = 8;
+snapDiameter = 7; // [1:0.01:10]
 
 // Wall Thickness where the Connector Ring ends on the leaf
 snapWall = 3.5;
@@ -57,11 +57,11 @@ bearingInnerDiameter = 10; // [3:0.1:20]
 //Outer Diameter (advanced)
 bearingOuterDiameter = 26; // [6:0.1:40]
 // Bearing Height (advanced)
-bearingHeight = 8; // [4:0.1:15]
+bearingHeight = 10; // [4:0.1:15]
 // Bearing Wall Width
 bearingWallWidth = 1.07; // [0.5:0.01:3]
 // Gap between Bearing "balls" and wall
-bearingGap = 0.27; // [0.05:0.01:1]
+bearingGap = 0.20; // [0.05:0.01:1]
 // A ring on the build plate reduces the risk of "balls" detaching from the build plate during printing. leave at zero for no ring.
 bearingBottomRingHeight = 0.0; // [0.05:0.01:0.5]
 
