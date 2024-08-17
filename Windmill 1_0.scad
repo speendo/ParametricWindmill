@@ -64,6 +64,7 @@ bearingWallWidth = 1.07; // [0.5:0.01:3]
 bearingGap = 0.20; // [0.05:0.01:1]
 // A ring on the build plate reduces the risk of "balls" detaching from the build plate during printing. leave at zero for no ring.
 bearingBottomRingHeight = 0.0; // [0.05:0.01:0.5]
+invertedRollers = true;
 
 resolution = 100;
 
@@ -221,7 +222,7 @@ module connector() {
         cylinder(d = bearingInnerDiameter + increment, h = bearingHeight);
         translate([0, 0, bearingHeight]) {
             difference() {
-                cylinder(h = 2 * wallThickness + stickDiameter, d = bearingInnerDiameter + 4 * bearingWallWidth);
+                cylinder(h = 2 * wallThickness + stickDiameter, d = invertedRollers?  bearingInnerDiameter + 2 * bearingWallWidth : bearingInnerDiameter + 4 * bearingWallWidth);
                 translate([-(bearingInnerDiameter / 2 + 2 * bearingWallWidth), 0, wallThickness + stickDiameter / 2]) {
                     rotate([0, 90, 0]) {
                         cylinder(h = bearingInnerDiameter + 4 * bearingWallWidth + 2, d = stickDiameter);
@@ -240,7 +241,7 @@ module makeWindmill() {
         }
         if (!debugNoBearing) {
             union() {
-                printedbearing(bearingInnerDiameter,bearingOuterDiameter,bearingHeight, bearingWallWidth, bearingGap, bearingBottomRingHeight);
+                printedbearing(bearingInnerDiameter,bearingOuterDiameter,bearingHeight, bearingWallWidth, bearingGap, bearingBottomRingHeight, invertedRollers);
                 connector();
             }
         }
