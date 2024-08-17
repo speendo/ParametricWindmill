@@ -13,8 +13,9 @@ height=7;        // Height
 wall_width=0.79; // Wall Width
 roller_gap=0.15; // Roller Gap
 bottom_ring_height=0.15; // print bottom ring
+inverted_roller=true;
 
-printedbearing(diameter_in,diameter_out,height, wall_width, roller_gap, bottom_ring_height);  // 608
+printedbearing(diameter_in,diameter_out,height, wall_width, roller_gap, bottom_ring_height, inverted_roller);  // 608
 
 // Examples
 //translate([0,0,0])  printedbearing(3,10,4, 0.52);  // 623
@@ -32,7 +33,7 @@ printedbearing(diameter_in,diameter_out,height, wall_width, roller_gap, bottom_r
 
 function catb(cata,catang)=cata/cos(catang)*sin(catang);
 
-module printedbearing(pdi=8, pdo=22, ph=7, pw=1, rg=0.15, br=true){
+module printedbearing(pdi=8, pdo=22, ph=7, pw=1, rg=0.15, brh=0.15, inr=false){
 
 do=pdo;
 di=pdi;
@@ -53,7 +54,7 @@ h3=h-h1*2-h2*2;
 
 n=floor(2*PI*(di/2+(do/2-di/2)/2)/(dr+w1*2));
 //echo(n);
-sph=bottom_ring_height;
+sph=brh;
 spw=0.6;
 $fn=64;
 
@@ -61,40 +62,72 @@ $fn=64;
 
 module bout(){
 difference(){
-union(){
-translate([0,0,h/2]) cylinder(h,do/2,do/2,true);
-} // un
-
-translate([0,0,h1/2-1/2]) cylinder(h1+1.1,do/2-w1-w2,do/2-w1-w2,true);
-translate([0,0,h1+h2/2]) cylinder(h2,do/2-w1-w2,do/2-w2,true);
-translate([0,0,h1+h2+h3/2]) cylinder(h3+0.02,do/2-w2,do/2-w2,true);
-translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,do/2-w2,do/2-w2-w1,true);
-translate([0,0,h1+h2+h3+h2+h1/2+1/2]) cylinder(h1+1.1,do/2-w2-w1,do/2-w2-w1,true);
+    union(){
+        translate([0,0,h/2]) cylinder(h,do/2,do/2,true);
+    } // un
+    
+    if (inr) {
+        union() {
+            translate([0,0,h1/2-1/2]) cylinder(h1+1.0001,do/2-w2,do/2-w2,true);
+            translate([0,0,h1+h2/2]) cylinder(h2,do/2-w2,do/2-w2-w1,true);
+            translate([0,0,h1+h2+h3/2]) cylinder(h3+0.02,do/2-w1-w2,do/2-w1-w2,true);
+            translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,do/2-w1-w2,do/2-w2,true);
+            translate([0,0,h1+h2+h3+h2+h1/2+1/2]) cylinder(h1+1.0001,do/2-w2,do/2-w2,true);
+        }
+    } else {
+        union() {
+            translate([0,0,h1/2-1/2]) cylinder(h1+1.1,do/2-w1-w2,do/2-w1-w2,true);
+            translate([0,0,h1+h2/2]) cylinder(h2,do/2-w1-w2,do/2-w2,true);
+            translate([0,0,h1+h2+h3/2]) cylinder(h3+0.02,do/2-w2,do/2-w2,true);
+            translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,do/2-w2,do/2-w2-w1,true);
+            translate([0,0,h1+h2+h3+h2+h1/2+1/2]) cylinder(h1+1.1,do/2-w2-w1,do/2-w2-w1,true);
+        }
+    }
 } // df
 } // mod
 
 module bin(){
 difference(){
-union(){
-translate([0,0,h1/2]) cylinder(h1,di/2+w2+w1,di/2+w2+w1,true);
-translate([0,0,h1+h2/2]) cylinder(h2,di/2+w2+w1,di/2+w2,true);
-translate([0,0,h1+h2+h3/2]) cylinder(h3,di/2+w2,di/2+w2,true);
-translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,di/2+w2,di/2+w2+w1,true);
-translate([0,0,h1+h2+h3+h2+h1/2]) cylinder(h1,di/2+w2+w1,di/2+w2+w1,true);
-} // un
-
-translate([0,0,h/2]) cylinder(h+1,di/2,di/2,true);
+    if (inr) {
+        union() {
+            translate([0,0,h1/2]) cylinder(h1,di/2+w2,di/2+w2,true);
+            translate([0,0,h1+h2/2]) cylinder(h2,di/2+w2,di/2+w2+w1,true);
+            translate([0,0,h1+h2+h3/2]) cylinder(h3,di/2+w2+w1,di/2+w2+w1,true);
+            translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,di/2+w2+w1,di/2+w2,true);
+            translate([0,0,h1+h2+h3+h2+h1/2]) cylinder(h1,di/2+w2,di/2+w2,true);
+        }
+    } else {
+        union(){
+            translate([0,0,h1/2]) cylinder(h1,di/2+w2+w1,di/2+w2+w1,true);
+            translate([0,0,h1+h2/2]) cylinder(h2,di/2+w2+w1,di/2+w2,true);
+            translate([0,0,h1+h2+h3/2]) cylinder(h3,di/2+w2,di/2+w2,true);
+            translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,di/2+w2,di/2+w2+w1,true);
+            translate([0,0,h1+h2+h3+h2+h1/2]) cylinder(h1,di/2+w2+w1,di/2+w2+w1,true);
+        } // un
+    }
+        
+    translate([0,0,h/2]) cylinder(h+1,di/2,di/2,true);
 } // df
 } // mod
 
 module rol(){
-union(){
-translate([0,0,h1/2]) cylinder(h1,dr/2,dr/2,true);
-translate([0,0,h1+h2/2]) cylinder(h2,dr/2,dr/2+w1,true);
-translate([0,0,h1+h2+h3/2]) cylinder(h3,dr/2+w1,dr/2+w1,true);
-translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,dr/2+w1,dr/2,true);
-translate([0,0,h1+h2+h3+h2+h1/2]) cylinder(h1,dr/2,dr/2,true);
-} // un
+if (inr) {
+    union() {
+        translate([0,0,h1/2]) cylinder(h1,dr/2+w1,dr/2+w1,true);
+        translate([0,0,h1+h2/2]) cylinder(h2,dr/2+w1,dr/2,true);
+        translate([0,0,h1+h2+h3/2]) cylinder(h3,dr/2,dr/2,true);
+        translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,dr/2,dr/2+w1,true);
+        translate([0,0,h1+h2+h3+h2+h1/2]) cylinder(h1,dr/2+w1,dr/2+w1,true);
+    }
+} else {
+    union(){
+        translate([0,0,h1/2]) cylinder(h1,dr/2,dr/2,true);
+        translate([0,0,h1+h2/2]) cylinder(h2,dr/2,dr/2+w1,true);
+        translate([0,0,h1+h2+h3/2]) cylinder(h3,dr/2+w1,dr/2+w1,true);
+        translate([0,0,h1+h2+h3+h2/2]) cylinder(h2,dr/2+w1,dr/2,true);
+        translate([0,0,h1+h2+h3+h2+h1/2]) cylinder(h1,dr/2,dr/2,true);
+    } // un
+}
 } // mod
 
 module sp(){
@@ -111,7 +144,7 @@ bout();
 bin();
 for (r=[0:n-1]) rotate([0,0,360/n*r])
 translate([di/2+(do/2-di/2)/2,0,0]) rol();
-if (br) {
+if (brh > 0) {
     sp();
 }
 } //un
