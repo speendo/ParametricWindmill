@@ -8,6 +8,8 @@ size = 200; // [50:0.1:400]
 // Diameter of the holding stick
 stickDiameter = 6; // [2.5:0.01:10]
 
+orientation = "V"; // [V:Vertical, H:Horizontal]
+
 /* [Text] */
 // Text (controls # of leaves)
 imprint = "YourText";
@@ -170,12 +172,14 @@ module leafText(letters) {
     
     initTextRot = readFrom == "B" ? 90 : readFrom == "T" ? -90 : 90;
     
+    orientationTextRot = orientation == "V" ? 0 : 90;
+    
     translate([0, 0, textPos]) {
         linear_extrude(height = finalThickness) {
             rotation = (direction() * 0.5* rot);
             rotate(rotation) {
             translate([(direction() * size ) /4 , rad]) {
-                    rotate(direction() * (initTextRot + textRotation)) {
+                    rotate(direction() * (initTextRot + textRotation + orientationTextRot)) {
                         mirror([mirrorText ? 1 : 0, 0]) {
                             text(letters, font = font, size = fontSize, halign="center", valign="center");
                         }
@@ -217,7 +221,7 @@ module bearingDummy() {
     }
 }
 
-module connector() {
+module connectorV() {
     union() {
         cylinder(d = bearingInnerDiameter + increment, h = bearingHeight);
         translate([0, 0, bearingHeight]) {
@@ -233,6 +237,20 @@ module connector() {
     }
 }
 
+module connectorH() {
+    difference() {
+        union() {
+            cylinder(d = bearingInnerDiameter + increment, h = bearingHeight);
+            translate([0, 0, bearingHeight]) {
+                cylinder(h = wallThickness, d = invertedRollers?  bearingInnerDiameter + 2 * bearingWallWidth : bearingInnerDiameter + 4 * bearingWallWidth);
+            }
+        }
+        translate([0, 0, -1]) {
+            cylinder(d = stickDiameter, h = bearingHeight + wallThickness + 2);
+        }
+    }
+}
+
 module makeWindmill() {
     union() {
         difference() {
@@ -242,7 +260,11 @@ module makeWindmill() {
         if (!debugNoBearing) {
             union() {
                 printedbearing(bearingInnerDiameter,bearingOuterDiameter,bearingHeight, bearingWallWidth, bearingGap, bearingBottomRingHeight, invertedRollers);
-                connector();
+                if (orientation == "V") {
+                    connectorV();
+                } else {
+                    connectorH();
+                }
             }
         }
     }
