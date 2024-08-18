@@ -6,13 +6,29 @@
 // by Radus 2018
 // http://vk.com/linuxbashev
 
+// remixed by Marcel Jira 2024
+
 // Parameters
-diameter_in=8;   // Inner Diameter
-diameter_out=22; // Outer Diameter
-height=7;        // Height
-wall_width=0.79; // Wall Width
-roller_gap=0.15; // Roller Gap
-bottom_ring_height=0.15; // print bottom ring
+
+// Inner (hole) diameter
+diameter_in=8;   // [0:0.1:200]
+
+// Outer diameter
+diameter_out=22; // [0:0.1:150]
+
+// Bearing height
+height=7;        // [0:0.1:50]
+
+// Wall thickness
+wall_width=0.79; // [0:0.001:3]
+
+// Gap between rollers and walls
+roller_gap=0.14; // [0:0.001:1]
+
+// When > 0, the rollers are connected with a ring - this improves printability but the ring needs to be removed after printing
+bottom_ring_height=0.0; // [0:0.001:0.5]
+
+// set false for original design by Radus
 inverted_roller=true;
 
 printedbearing(diameter_in,diameter_out,height, wall_width, roller_gap, bottom_ring_height, inverted_roller);  // 608
@@ -52,7 +68,7 @@ h1=w1;
 h3=h-h1*2-h2*2;
 
 
-n=floor(2*PI*(di/2+(do/2-di/2)/2)/(dr+w1*2));
+n=floor(2*PI*(di/2+(do/2-di/2)/2)/(dr+w1*2+zz));
 //echo(n);
 sph=brh;
 spw=0.6;
