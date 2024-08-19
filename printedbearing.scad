@@ -31,9 +31,17 @@ bottom_ring_height=0.0; // [0:0.001:0.5]
 // set false for original design by Radus
 inverted_roller=true;
 
-printedbearing(diameter_in,diameter_out,height, wall_width, roller_gap, bottom_ring_height, inverted_roller);  // 608
+printedbearing(diameter_in, diameter_out, height, wall_width, roller_gap, bottom_ring_height, inverted_roller);  // 608
 
-// Examples
+// New Examples
+//printedbearing(8, 22, 7, 1.07, 0.14, 0, true); // 608 bearing for fast speed & low load
+//printedbearing(8, 22, 7, 0.82, 0.14, 0, true); // 608 bearing for low speed & high load
+//printedbearing(10, 26, 8, 1.07, 0.14, 0, true); // 6000 bearing for fast speed & low load
+//printedbearing(10, 26, 8, 0.82, 0.14, 0, true); // 6000 bearing for low speed & high load
+//printedbearing(10, 26, 8, 0.86, 0.14, 0, true); // 6000 bearing for low speed & high load
+//printedbearing(10, 26, 8, 1.08, 0.2, 0, true); // 6000 bearing - balanced and easy to print
+
+// Old Examples
 //translate([0,0,0])  printedbearing(3,10,4, 0.52);  // 623
 //translate([20,0,0]) printedbearing(4,13,5, 0.65);  // 624
 //translate([-20,0,0]) printedbearing(5,16,5, 0.81); // 625
@@ -57,7 +65,7 @@ h=ph;
 w2=pw;
 w1=w2;
 
-zz=rg;             // gap between rollers and base
+zz=rg;             // gap between two rollers and rollers and base
 
 dr=do/2-di/2-w1*2-w2*2-zz*2;
 
@@ -67,14 +75,33 @@ h2=catb(w1,45);     // angle inside rollers
 h1=w1;
 h3=h-h1*2-h2*2;
 
+rollerLineCircumf = PI * (do + di) / 2;
+virtRollerCountNoGap = rollerLineCircumf / (dr + 2 * w1);
+virtRollerCountWGap = rollerLineCircumf / (dr + 2 * w1 + zz);
 
-n=floor(2*PI*(di/2+(do/2-di/2)/2)/(dr+w1*2+zz));
-//echo(n);
+n = floor(virtRollerCountWGap);
+
+maxGap = rollerLineCircumf - n * (dr + 2 * w1);
+maxGapShare =  round(1000 * (maxGap / (dr + 2 * w1))) / 1000;
+
+avgGap = (rollerLineCircumf - n * (dr + 2 * w1)) / n;
+avgGapShare =  round(1000 * (avgGap / (dr + 2 * w1))) / 1000;
+
+
 sph=brh;
 spw=0.6;
 $fn=64;
 
-
+echo("");
+echo("=== Bearing Data ===");
+echo(str("Number of rollers: ", n));
+echo(str("Roller size: ", dr + 2 * w1));
+echo(str("Biggest possible gap: ", maxGap));
+echo(str("Biggest Gap Share: ", 100 * maxGapShare, " % of a complete roller"));
+echo(str("Average gap: ", avgGap));
+echo(str("Average Gap Share: ", 100 * avgGapShare, " % of a complete roller"));
+echo("=== End Bearing Data ===");
+echo("");
 
 module bout(){
 difference(){

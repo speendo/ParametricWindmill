@@ -57,11 +57,11 @@ bearingInnerDiameter = 10; // [3:0.1:20]
 //Outer Diameter (advanced)
 bearingOuterDiameter = 26; // [6:0.1:40]
 // Bearing Height (advanced)
-bearingHeight = 10; // [4:0.1:15]
+bearingHeight = 8; // [4:0.1:15]
 // Bearing Wall Width
-bearingWallWidth = 1.07; // [0.5:0.01:3]
+bearingWallWidth = 1.08; // [0.5:0.01:3]
 // Gap between Bearing "balls" and wall
-bearingGap = 0.20; // [0.05:0.01:1]
+bearingGap = 0.2; // [0.05:0.001:1]
 // A ring on the build plate reduces the risk of "balls" detaching from the build plate during printing. leave at zero for no ring.
 bearingBottomRingHeight = 0.0; // [0.05:0.01:0.5]
 invertedRollers = true;
