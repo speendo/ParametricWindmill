@@ -242,11 +242,11 @@ module connectorH() {
         union() {
             cylinder(d = bearingInnerDiameter + increment, h = bearingHeight);
             translate([0, 0, bearingHeight]) {
-                cylinder(h = wallThickness, d = invertedRollers?  bearingInnerDiameter + 2 * bearingWallWidth : bearingInnerDiameter + 4 * bearingWallWidth);
+                cylinder(h = wallThickness + stickDiameter, d = invertedRollers?  bearingInnerDiameter + 2 * bearingWallWidth : bearingInnerDiameter + 4 * bearingWallWidth);
             }
         }
         translate([0, 0, -1]) {
-            cylinder(d = stickDiameter, h = bearingHeight + wallThickness + 2);
+            cylinder(d = stickDiameter, h = bearingHeight + wallThickness + stickDiameter + 2);
         }
     }
 }
