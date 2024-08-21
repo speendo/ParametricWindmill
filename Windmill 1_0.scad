@@ -1,6 +1,6 @@
 /* [Main Settings] */
 // Which part to generate
-part = "W"; // [W:Windmill, T:Text, A:All]
+part = "W"; // [W:Windmill, T:Text, A:All, B:Bearing, L:First Leaf]
 
 // Total Diameter
 size = 200; // [50:0.1:400]
@@ -166,9 +166,9 @@ module oneLeafWithCutouts() {
 
 module leafText(letters) {
     embossThickness = textPosition == "A" ? thickness + 2 : textThickness + 1;
-    finalThickness = part == "T" || part == "A" ? textPosition == "A" ? thickness : textThickness : embossThickness;
+    finalThickness = part == "T" || part == "A" || part == "L" ? textPosition == "A" ? thickness : textThickness : embossThickness;
     
-    textPos = part == "T" || part == "A" ? 0 : textPosition == "A" ? -1 : textPosition == "F" ? -1 : textPosition == "L" ? thickness - textThickness : 0;
+    textPos = part == "T" || part == "A" || part == "L" ? 0 : textPosition == "A" ? -1 : textPosition == "F" ? -1 : textPosition == "L" ? thickness - textThickness : 0;
     
     initTextRot = readFrom == "B" ? 90 : readFrom == "T" ? -90 : 90;
     
@@ -258,14 +258,18 @@ module makeWindmill() {
             if (!debugNoBearing) bearingDummy();
         }
         if (!debugNoBearing) {
-            union() {
-                printedbearing(bearingInnerDiameter,bearingOuterDiameter,bearingHeight, bearingWallWidth, bearingGap, bearingBottomRingHeight, invertedRollers);
-                if (orientation == "V") {
-                    connectorV();
-                } else {
-                    connectorH();
-                }
-            }
+            makeConnector();    
+        }
+    }
+}
+
+module makeConnector() {
+    union() {
+        printedbearing(bearingInnerDiameter,bearingOuterDiameter,bearingHeight, bearingWallWidth, bearingGap, bearingBottomRingHeight, invertedRollers);
+        if (orientation == "V") {
+            connectorV();
+        } else {
+            connectorH();
         }
     }
 }
@@ -281,7 +285,12 @@ module select() {
             allText();
         }
     }
-
+    if (part == "B") {
+        makeConnector();
+    }
+    if (part == "L") {
+        oneLeafWithEmboss(curLetter(0, 1));
+    }
 }
 
 select();
